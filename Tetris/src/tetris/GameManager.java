@@ -30,9 +30,9 @@ public class GameManager{
 	
 	public GameManager() {
 		
-    	gameScreen = new GameScreen();
 		this.board = new Board();
-		
+		gameScreen = new GameScreen(board);
+
     	gameScreen.addWindowListener(new WindowAdapter() {
       	  public void windowClosing(WindowEvent e) {
       		  stopGame(false);

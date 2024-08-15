@@ -24,9 +24,12 @@ public class GameScreen extends JFrame {
     Color gridColor = Color.WHITE;
     Color emptyColor = Color.LIGHT_GRAY;
     Color pieceColor = Color.BLUE;
+    Color nextpieceColor = Color.BLUE;
     Color lockedColor = Color.GRAY;
+    tetris.Board board;
 
-    public GameScreen() {
+    public GameScreen(tetris.Board board) {
+    	this.board = board;
         setTitle("Tetris");
         setSize(GRID_COLS * 20 + 200 + 2 * HORIZONTAL_PADDING, GRID_ROWS * 20 + 2 * VERTICAL_PADDING);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -115,6 +118,7 @@ public class GameScreen extends JFrame {
     }
 
     public void setGridSquareColor(int row, int col, int value) {
+    	pieceColor = board.current_piece.piece_color;
         if (row >= 0 && row < GRID_ROWS && col >= 0 && col < GRID_COLS) {
             JPanel square = gridSquares[row][col];
             switch (value) {
@@ -142,6 +146,8 @@ public class GameScreen extends JFrame {
     }
 
     public void setNextPieceSquareColor(int row, int col, int value) {
+    	nextpieceColor = board.next_piece.piece_color;
+
         if (row >= 0 && row < 4 && col >= 0 && col < 4) {
             JPanel square = nextPieceSquares[row][col];
             switch (value) {
@@ -152,10 +158,10 @@ public class GameScreen extends JFrame {
                     square.setBackground(gridColor);
                     break;
                 case 1:
-                    square.setBackground(pieceColor);
+                    square.setBackground(nextpieceColor);
                     break;
                 case -1:
-                    square.setBackground(pieceColor);
+                    square.setBackground(nextpieceColor);
                     break;
                 case 2:
                     square.setBackground(lockedColor);

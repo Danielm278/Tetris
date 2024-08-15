@@ -13,7 +13,7 @@ public class Board{
 	public final int BOARD_SIZE_X = 10;
 	public final int BOARD_SIZE_Y = 20;
 	public Boolean isMoveable = true;
-	Piece current_piece, next_piece;
+	public Piece current_piece, next_piece;
 	final int EMPTY_ROWS = 5;
 	Random rng = new Random();
 	ReadWriteLock thread_lock = new ReentrantReadWriteLock();
