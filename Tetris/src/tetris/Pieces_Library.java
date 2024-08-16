@@ -283,7 +283,7 @@ class Z_Shape extends Piece{
 
 class Reverse_Z_Shape extends Piece{
 	public Reverse_Z_Shape() {
-		piece_color = Color.PINK;
+		piece_color = new Color(160, 32, 240);
 		
 		int[][][] _shapes = {
 		        {{-2,-2,-2},{-2, -1, -1},{-1, -1, -2}},

@@ -18,10 +18,11 @@ public class Piece_Factory {
 	}
 	
 	public Piece Gen_piece() {
-		int number = rng.nextInt(PIECE_LIST.length - 1);
+		int number = rng.nextInt(PIECE_LIST.length);
 		try {
-
-			//return reflector.Generate(PIECE_LIST[number]);
+			
+			//System.out.println(PIECE_LIST[number]);
+			//Piece temp = reflector.Generate(PIECE_LIST[PIECE_LIST.length-1]);
 			Piece temp = reflector.Generate(PIECE_LIST[number]);
 			temp.Set_Board(board);
 			temp.pieceColor = pieceColors[number];
