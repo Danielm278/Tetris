@@ -1,6 +1,7 @@
 package tetris;
 import java.util.Random;
 import java.lang.reflect.Constructor;
+import java.awt.Color;
 
 public class Piece_Factory {
 	Piece_Generator reflector = new Piece_Generator();
@@ -9,6 +10,8 @@ public class Piece_Factory {
 			"O_Shape", "Z_Shape", "Reverse_Z_Shape"};
 	Random rng = new Random();
 	Board board;
+	private Color[] pieceColors = {new Color(128, 0, 128),  Color.BLUE , new Color(255, 165, 0), Color.CYAN, new Color(255, 204, 0), Color.RED, Color.GREEN};
+	
 	public Piece_Factory(Board board) {
 		this.board = board;
 		
@@ -21,6 +24,8 @@ public class Piece_Factory {
 			//return reflector.Generate(PIECE_LIST[number]);
 			Piece temp = reflector.Generate(PIECE_LIST[number]);
 			temp.Set_Board(board);
+			temp.pieceColor = pieceColors[number];
+			
 			return temp;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

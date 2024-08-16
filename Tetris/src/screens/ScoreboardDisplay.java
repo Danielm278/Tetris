@@ -15,14 +15,16 @@ import javax.imageio.ImageIO;
 
 public class ScoreboardDisplay {
     public static void showScoreboard() {
+    	MusicPlayer player = MusicPlayer.getInstance();
+ 	    player.playMusic("Tetris\\src\\scoreBoard.wav", false);
         JFrame frame = new JFrame("Scoreboard");
         frame.addWindowListener(new WindowAdapter() {
       	  public void windowClosing(WindowEvent e) {
       		  TetrisOpeningScreen.openScreen();
       	  }
       	});
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(800, 500);
         frame.setLocationRelativeTo(null); // Center the frame
 
         // Create a panel with a background image
@@ -52,7 +54,7 @@ public class ScoreboardDisplay {
                 if (c instanceof JComponent) {
                     ((JComponent) c).setOpaque(false);
                 }
-                c.setForeground(Color.BLACK); // Set text color to black
+                c.setForeground(Color.WHITE); // Set text color to black
                 ((JLabel) c).setHorizontalAlignment(SwingConstants.CENTER); // Center text
                 return c;
             }
