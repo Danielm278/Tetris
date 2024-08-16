@@ -21,7 +21,7 @@ public class ScoreboardDisplay {
       		  TetrisOpeningScreen.openScreen();
       	  }
       	});
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setLocationRelativeTo(null); // Center the frame
 
