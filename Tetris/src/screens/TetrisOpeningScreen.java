@@ -7,11 +7,14 @@ import tetris.GameManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.io.File;
 
 public class TetrisOpeningScreen  extends Thread implements IThread{
+	static boolean firstTime = true;
     public void run() {
     	MusicPlayer player = MusicPlayer.getInstance();
  	    player.playMusic("Tetris\\src\\welcome to the show.wav", false);
@@ -27,7 +30,7 @@ public class TetrisOpeningScreen  extends Thread implements IThread{
         // Create and set up the window
         JFrame frame = new JFrame("Tetris Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(400, 330);
         frame.setLocationRelativeTo(null); // Center the frame
 
         // Use the absolute path for the image
@@ -44,11 +47,18 @@ public class TetrisOpeningScreen  extends Thread implements IThread{
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	//************************************************************************************************************************
         	    MusicPlayer player = MusicPlayer.getInstance();
         	    player.playMusic("Tetris\\src\\game_music.wav", true);
                 // Code to start the game goes here
-                GameManager gameManager = new GameManager();
+        	    if(firstTime) {
+        	    	firstTime = false;
+        	    	new TutorialScreen(true);
+        	    }
+        	    else
+        	    	{
+        	    	GameManager gameManager = new GameManager();
+        	    	}
+                 
                 frame.dispose();
                 // new TetrisGame().start(); // Un-comment and replace with actual game start code
             }
@@ -56,8 +66,21 @@ public class TetrisOpeningScreen  extends Thread implements IThread{
         backgroundPanel.add(startButton);
 
         // Create and add a scoreboard button with rounded corners
+        CustomRoundedButton tutorialButton = new CustomRoundedButton("Tutorial");
+        tutorialButton.setBounds(145, 170, 100, 30); // Position above the exit button
+        tutorialButton.setBackground(Color.MAGENTA);
+        tutorialButton.setForeground(Color.WHITE);
+        tutorialButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	new TutorialScreen(false);
+            }
+        });
+        backgroundPanel.add(tutorialButton);
+
+        // Create and add a scoreboard button with rounded corners
         CustomRoundedButton scoreboardButton = new CustomRoundedButton("Scoreboard");
-        scoreboardButton.setBounds(135, 170, 120, 30); // Position above the exit button
+        scoreboardButton.setBounds(145, 205, 100, 30); // Position above the exit button
         scoreboardButton.setBackground(Color.BLUE);
         scoreboardButton.setForeground(Color.WHITE);
         scoreboardButton.addActionListener(new ActionListener() {
@@ -71,7 +94,7 @@ public class TetrisOpeningScreen  extends Thread implements IThread{
 
         // Create and add an exit button with rounded corners
         CustomRoundedButton exitButton = new CustomRoundedButton("Exit");
-        exitButton.setBounds(145, 205, 100, 30); // Adjust position and size for block 2
+        exitButton.setBounds(145, 240, 100, 30); // Adjust position and size for block 2
         exitButton.setBackground(Color.RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(new ActionListener() {
