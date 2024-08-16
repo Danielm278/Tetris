@@ -2,16 +2,22 @@ package tetris;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.InputStream;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import java.io.File;
+import java.io.IOException;
 
 import screens.EndScreen;
 import screens.GameScreen;
@@ -38,6 +44,7 @@ public class GameManager{
     	gameScreen.addWindowListener(new WindowAdapter() {
       	  public void windowClosing(WindowEvent e) {
       		  stopGame(false);
+      		  game_music_player.stopMusic();
     		  TetrisOpeningScreen.openScreen();
     	  }
     	});
@@ -91,7 +98,6 @@ public class GameManager{
 	        timer.shutdown();
 	        if(openEndScreen)
 	        	EndScreen.showEndScreen(board.score);
-    	    game_music_player.stopMusic();
 	        gameScreen.dispose();
 	        isRunning = false;
 	        return true;
@@ -161,7 +167,20 @@ public class GameManager{
 			gameScreen.updateScore(board.score);
 			if(previousScore<board.score) {
 				previousScore = board.score;
-	            //totach_player.playMusic("Tetris\\src\\totach.wav", false);
+				new Thread(() -> 
+				{
+					long loc = game_music_player.clip.getMicrosecondPosition();
+					System.out.println("stopping game music");
+					game_music_player.stopMusic();
+					System.out.println("starting totach music");
+					totach_player.playMusic("Tetris\\src\\totach.wav", false);
+					while(totach_player.clip.getMicrosecondLength() != totach_player.clip.getMicrosecondPosition()) {}
+					System.out.println("starting game music");
+					game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
+					game_music_player.clip.setMicrosecondPosition(loc);
+					game_music_player.clip.start();
+		        }
+				).start();
 			}
 		}
 	}	

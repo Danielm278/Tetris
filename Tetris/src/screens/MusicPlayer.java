@@ -9,7 +9,7 @@ import javax.sound.sampled.AudioInputStream;
 import java.io.File;
 
 public class MusicPlayer {
-    private Clip clip;
+    public Clip clip;
     private static MusicPlayer instance;
 
     private MusicPlayer() {
