@@ -1,3 +1,4 @@
+
 package screens;
 
 import javax.swing.*;
@@ -217,8 +218,4 @@ class CustomInputbox extends JTextField {
             parent.add(nameLabel);
         }
     }
-    
-    
-   
-
 }
