@@ -17,8 +17,21 @@ import javax.swing.text.DocumentFilter;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+
+
+
+
 public class EndScreen {
     public static void showEndScreen(int score) {
+    	// Stop the music from GameScreen
+    	MusicPlayer player = MusicPlayer.getInstance();
+    	player.stopMusic();
+
+    	// Play the loser sound once when the end screen is shown
+    	player.playMusic("Tetris\\src\\loser.wav", false);
+
+       
+
         // Create and set up the window
         JFrame frame = new JFrame("Game Over");
         frame.addWindowListener(new WindowAdapter() {
@@ -94,6 +107,8 @@ public class EndScreen {
         // Display the window
         frame.setVisible(true);
     }
+
+   
 }
 
 // Custom JPanel class for drawing background image
@@ -205,6 +220,8 @@ class CustomInputbox extends JTextField {
             parent.add(nameLabel);
         }
     }
+    
+    
+   
+
 }
-
-

@@ -3,9 +3,8 @@ package tetris;
 import java.util.Random;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import screens.GameScreen;
-
+import java.awt.Color;
 
 public class Board{
 	public int[][] board;
@@ -13,7 +12,7 @@ public class Board{
 	public final int BOARD_SIZE_X = 10;
 	public final int BOARD_SIZE_Y = 20;
 	public Boolean isMoveable = true;
-	Piece current_piece, next_piece;
+	public Piece current_piece, next_piece;
 	final int EMPTY_ROWS = 5;
 	Random rng = new Random();
 	ReadWriteLock thread_lock = new ReentrantReadWriteLock();
@@ -206,8 +205,13 @@ public class Board{
 		}
 		
 		if(!piece_alive) {
+			updateNextPiece = true;
 			current_piece = spawn_piece();
 			updateNextPiece = true;
 		}
+	}
+	
+	public void setCurrentPieceColor(Color color) {
+	    this.current_piece.pieceColor = color;
 	}
 }

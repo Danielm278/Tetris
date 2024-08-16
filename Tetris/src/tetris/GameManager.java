@@ -2,8 +2,6 @@ package tetris;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -17,6 +15,8 @@ import javax.swing.KeyStroke;
 
 import screens.EndScreen;
 import screens.GameScreen;
+import screens.IThread;
+import screens.MusicPlayer;
 import screens.TetrisOpeningScreen;
 
 public class GameManager{	
@@ -26,12 +26,14 @@ public class GameManager{
 	private GameScreen gameScreen;    
 	private ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
 	private ScheduledFuture<?> scheduledFuture;
+	int previousScore = 0; // Add a variable to track the previous score
 
 	
 	public GameManager() {
 		
-    	gameScreen = new GameScreen();
 		this.board = new Board();
+    	gameScreen = new GameScreen(board);
+
 		
     	gameScreen.addWindowListener(new WindowAdapter() {
       	  public void windowClosing(WindowEvent e) {
@@ -62,6 +64,9 @@ public class GameManager{
         actionMap.put("moveRight", handler.right);
         actionMap.put("moveDown", handler.down);
         actionMap.put("spaceAction", handler.rotate);
+        
+        
+        gameScreen.set_Current_Piece_Color(board.current_piece.pieceColor);
     	
     	
 //        KeypressSimulation test = new KeypressSimulation(board);
@@ -93,7 +98,7 @@ public class GameManager{
 	    return false;
 	}
 	
-	public class Helper implements Runnable {
+	public class Helper implements Runnable, IThread {
 		ScheduledExecutorService _timer;
 		int counter;
 		Board board;
@@ -111,11 +116,12 @@ public class GameManager{
 	    	}
 	    	if(counter > 10) {
 	    		counter = 0;
-	    		board.multiplier += 0.01;
+	    		board.multiplier += 0.005;
 	    		gameScreen.flashLevelUp();
-	    		System.out.println("********tick speed = "+(int) (50 + 200* Math.exp(-1*board.multiplier))+"**********");
+	    		System.out.println("********tick speed = "+(int) (50 + 300* Math.exp(-0.8*board.multiplier))+"**********");
 	    		scheduledFuture.cancel(true);
-	    		scheduledFuture = timer.scheduleAtFixedRate(gameTask, 250, (int) (50 + 200* Math.exp(-1*board.multiplier)), TimeUnit.MILLISECONDS);	    	}
+	    		scheduledFuture = timer.scheduleAtFixedRate(gameTask, 250, (int) (50 + 300* Math.exp(-0.8*board.multiplier)), TimeUnit.MILLISECONDS);	    	}
+
 	    	
 			board.move_down();
 //			_board.print_board();
@@ -123,6 +129,7 @@ public class GameManager{
 			updateBoard();
 			if(board.updateNextPiece)
 			{
+				gameScreen.set_Current_Piece_Color(board.current_piece.pieceColor);
 				updateNextPiece();
 				board.updateNextPiece = false;
 				counter += 1;
@@ -144,7 +151,6 @@ public class GameManager{
 //	    	}catch(Exception e)
 //    		{System.out.println(e.getStackTrace());}
 		}
-	    
 		public void updateBoard() {
 			for(int i = 0; i < board.BOARD_SIZE_Y; i++) {
 				for(int j = 0; j< board.BOARD_SIZE_X; j++) {
@@ -152,6 +158,16 @@ public class GameManager{
 				}
 			}
 			gameScreen.updateScore(board.score);
+			 // Check if the score has increased
+	        if (board.score > previousScore) {
+	            // Play the sound for earning points
+	            MusicPlayer player = MusicPlayer.getInstance();
+	            player.playMusic("Tetris\\src\\totach.wav", false);
+	            MusicPlayer player1 = MusicPlayer.getInstance();
+        	    player1.playMusic("Tetris\\src\\game_music.wav", true);
+	            // Update the previous score to the current score
+	            previousScore = board.score;
+	            }
 		}
 	}	
 }

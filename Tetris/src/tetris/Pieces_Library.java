@@ -1,10 +1,12 @@
 package tetris;
 
+import java.awt.Color;
 
 class T_Shape extends Piece{
 	
 	public T_Shape() {
-
+		piece_color = Color.RED;
+		
 		int[][][] _shapes = {
 				{{-2,-1,-2},{-1,-1,-1},{-2,-2,-2}},
 				{{-1,-2,-2},{-1,-1,-2},{-1,-2,-2}},
@@ -58,6 +60,8 @@ class T_Shape extends Piece{
 class r_Shape extends Piece{
 	
 	public r_Shape() {
+		piece_color = Color.BLUE;
+
 		int[][][] _shapes = {
 				{{-2, -1, -1}, {-2, -1, -2}, {-2, -1, -2}},
 				{{-2, -2, -2}, {-1, -1, -1}, {-2, -2, -1}},
@@ -116,7 +120,8 @@ class r_Shape extends Piece{
 
 class L_Shape extends Piece{
 	public L_Shape() {
-		
+		piece_color = Color.GREEN;
+
 		int[][][] _shapes = {
 				{{-1, -1, -2}, {-2, -1, -2}, {-2, -1, -2}},
 				{{-2, -2, -1}, {-1, -1, -1}, {-2, -2, -2}},
@@ -174,6 +179,9 @@ class L_Shape extends Piece{
 
 class I_Shape extends Piece{
 	public I_Shape() {
+		piece_color = Color.MAGENTA;
+
+		
 		int[][][]  _shapes = {
 	        {{-2,-2,-2,-2},
 	         {-1, -1, -1, -1},
@@ -201,6 +209,11 @@ class I_Shape extends Piece{
 			pos.set(orientation, pos.get(orientation)-1);
 			orientation = (orientation + 1)%2;
 			
+
+			if(pos.get(0)+3 > 49 || super.Check_Collision()) {
+				return;
+			}
+			
 			super.Implement_Rotation();
 			
 		}
@@ -217,6 +230,8 @@ class O_Shape extends Piece{
 	        {{-1, -1},{ -1, -1}}
 	    };
 	public O_Shape() {
+		piece_color = Color.CYAN;
+
 		super.SHAPES = SHAPES;
 		super.Set_Shape(SHAPES[0]);
 	}
@@ -229,6 +244,9 @@ class O_Shape extends Piece{
 
 class Z_Shape extends Piece{
 	public Z_Shape() {
+		piece_color = Color.ORANGE;
+
+		
 		int[][][] _shapes = {
 		        {{-2,-2,-2},{-1, -1, -2},{-2, -1, -1}},
 		        {{-2,-2,-1},{-2, -1, -1},{-2, -1, -2}}
@@ -247,6 +265,11 @@ class Z_Shape extends Piece{
 			orientation = (orientation + 1)%2;
 			pos.set(0, pos.get(0)-orientation);
 			
+
+			if(pos.get(0)+3 > 49 || super.Check_Collision()) {
+				return;
+			}
+			
 			super.Implement_Rotation();
 			
 		}
@@ -260,6 +283,8 @@ class Z_Shape extends Piece{
 
 class Reverse_Z_Shape extends Piece{
 	public Reverse_Z_Shape() {
+		piece_color = Color.PINK;
+		
 		int[][][] _shapes = {
 		        {{-2,-2,-2},{-2, -1, -1},{-1, -1, -2}},
 		        {{-1,-2,-2},{-1, -1, -2},{-2, -1, -2}}
@@ -277,6 +302,11 @@ class Reverse_Z_Shape extends Piece{
 			super.Rotate();
 			pos.set(orientation, pos.get(orientation)-1);
 			orientation = (orientation + 1)%2;
+			
+
+			if(pos.get(0)+3 > 49 || super.Check_Collision()) {
+				return;
+			}
 			
 			super.Implement_Rotation();
 			

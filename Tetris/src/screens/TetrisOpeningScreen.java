@@ -11,13 +11,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.io.File;
 
-public class TetrisOpeningScreen  extends Thread {
+public class TetrisOpeningScreen  extends Thread implements IThread{
     public void run() {
+    	MusicPlayer player = MusicPlayer.getInstance();
+ 	    player.playMusic("Tetris\\src\\welcome to the show.wav", false);
     	openScreen();
 //        GameManager gameManager = new GameManager();
     }
     
     public static void openScreen() {
+    	 
         // Ensure the scoreboard file exists
         ScoreBoard.ensureFileExists();
 
@@ -32,6 +35,7 @@ public class TetrisOpeningScreen  extends Thread {
         BackgroundPanel backgroundPanel = new BackgroundPanel(imagePath);
         backgroundPanel.setLayout(null); // Use null layout for absolute positioning
 
+        
         // Create and add a start game button with rounded corners
         CustomRoundedButton startButton = new CustomRoundedButton("Start Game");
         startButton.setBounds(145, 135, 100, 30); // Adjust position and size for block 1
@@ -40,6 +44,9 @@ public class TetrisOpeningScreen  extends Thread {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	//************************************************************************************************************************
+        	    MusicPlayer player = MusicPlayer.getInstance();
+        	    player.playMusic("Tetris\\src\\game_music.wav", true);
                 // Code to start the game goes here
                 GameManager gameManager = new GameManager();
                 frame.dispose();

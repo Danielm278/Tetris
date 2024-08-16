@@ -2,6 +2,8 @@ package tetris;
 
 import java.util.ArrayList;
 import java.util.Vector;
+import java.awt.Color;
+
 
 public abstract class Piece {
 	int[][] shape;
@@ -9,11 +11,15 @@ public abstract class Piece {
 	Board board;
 	int orientation;
 	protected int[][][] SHAPES;
+	
+	public Color piece_color;
 
 	protected Vector<Integer> pos;
 	protected Vector<Integer> pos2;
 	ArrayList<Vector<Integer>> location = new ArrayList<Vector<Integer>>();
 	
+	
+	protected Color pieceColor;
 	
 	private final int X  = 1;
 	private final int Y = 0;
@@ -40,8 +46,9 @@ public abstract class Piece {
 	}
 	
 	public boolean Check_Collision() {
-		for(int i = 0; i < size[0]; i++) {
-			for(int j = 0; j < size[1]; j++) {
+		int size_Max = Math.max(size[0], size[1]);
+		for(int i = 0; i < size_Max; i++) {
+			for(int j = 0; j < size_Max; j++) {
 				if(board.board[pos.get(0) + i][pos.get(1) + j] == 2) {
 					return true;
 				}
@@ -107,5 +114,10 @@ public abstract class Piece {
 	public void Set_Board(Board board)
 	{
 		this.board = board;
+	}
+	
+	public Color getPieceColor()
+	{
+		return pieceColor;
 	}
 }
