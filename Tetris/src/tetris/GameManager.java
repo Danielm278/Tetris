@@ -27,13 +27,13 @@ public class GameManager{
 	private ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
 	private ScheduledFuture<?> scheduledFuture;
 	int previousScore = 0; // Add a variable to track the previous score
-
+    MusicPlayer game_music_player = MusicPlayer.getInstance();
+    MusicPlayer totach_player = MusicPlayer.getInstance();
 	
 	public GameManager() {
 		
 		this.board = new Board();
     	gameScreen = new GameScreen(board);
-
 		
     	gameScreen.addWindowListener(new WindowAdapter() {
       	  public void windowClosing(WindowEvent e) {
@@ -74,7 +74,7 @@ public class GameManager{
         isRunning = true;
         System.out.println((int) (250 / board.multiplier));
         scheduledFuture = timer.scheduleAtFixedRate(gameTask, 250, (int) (250 / board.multiplier), TimeUnit.MILLISECONDS); // Use scheduleAtFixedRate for fixed interval
-        
+	    game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
 //        while(isRunning) {
 //        	try {
 //        		gameTask.run();
@@ -91,6 +91,7 @@ public class GameManager{
 	        timer.shutdown();
 	        if(openEndScreen)
 	        	EndScreen.showEndScreen(board.score);
+    	    game_music_player.stopMusic();
 	        gameScreen.dispose();
 	        isRunning = false;
 	        return true;
@@ -158,16 +159,10 @@ public class GameManager{
 				}
 			}
 			gameScreen.updateScore(board.score);
-			 // Check if the score has increased
-	        if (board.score > previousScore) {
-	            // Play the sound for earning points
-	            MusicPlayer player = MusicPlayer.getInstance();
-	            player.playMusic("Tetris\\src\\totach.wav", false);
-	            MusicPlayer player1 = MusicPlayer.getInstance();
-        	    player1.playMusic("Tetris\\src\\game_music.wav", true);
-	            // Update the previous score to the current score
-	            previousScore = board.score;
-	            }
+			if(previousScore<board.score) {
+				previousScore = board.score;
+	            //totach_player.playMusic("Tetris\\src\\totach.wav", false);
+			}
 		}
 	}	
 }

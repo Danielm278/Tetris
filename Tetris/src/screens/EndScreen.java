@@ -1,3 +1,4 @@
+
 package screens;
 
 import javax.swing.*;
@@ -25,12 +26,9 @@ public class EndScreen {
     public static void showEndScreen(int score) {
     	// Stop the music from GameScreen
     	MusicPlayer player = MusicPlayer.getInstance();
-    	player.stopMusic();
 
     	// Play the loser sound once when the end screen is shown
     	player.playMusic("Tetris\\src\\loser.wav", false);
-
-       
 
         // Create and set up the window
         JFrame frame = new JFrame("Game Over");
@@ -220,8 +218,4 @@ class CustomInputbox extends JTextField {
             parent.add(nameLabel);
         }
     }
-    
-    
-   
-
 }
