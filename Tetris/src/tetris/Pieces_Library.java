@@ -300,7 +300,7 @@ class Reverse_Z_Shape extends Piece{
 		board.board_copy(temp);
 		try {
 			super.Rotate();
-			pos.set(orientation, pos.get(orientation)-1);
+			//pos.set(orientation, pos.get(orientation)-1);
 			orientation = (orientation + 1)%2;
 			
 
