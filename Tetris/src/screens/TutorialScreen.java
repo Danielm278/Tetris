@@ -24,7 +24,7 @@ public class TutorialScreen extends JFrame {
         JPanel tutorialPanel = new JPanel();
         tutorialPanel.setLayout(new BoxLayout(tutorialPanel, BoxLayout.Y_AXIS));
         tutorialPanel.setOpaque(false); // Make the panel transparent
-        tutorialPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        tutorialPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
 
         // Add tutorial explanation
         JLabel titleLabel = new JLabel("How to Play Tetris");
@@ -53,11 +53,12 @@ public class TutorialScreen extends JFrame {
         tutorialPanel.add(controlsLabel);
 
         JLabel controlsTextLabel = new JLabel("<html><div style='text-align: center;'>"
-                + "Move Left: Left Arrow Key<br>"
-                + "Move Right: Right Arrow Key<br>"
-                + "Move Down: Down Arrow Key<br>"
-                + "Rotate Piece: Space Bar<br>"
-                + "Pause game: Escape"
+                + "<b>Move Left:</b> Left Arrow Key<br>"
+                + "<b>Move Right:</b> Right Arrow Key<br>"
+                + "<b>Move Down:</b> Down Arrow Key<br>"
+                + "<b>Rotate Piece:</b> Space Bar<br>"
+                + "<b>Mute:</b> M<br>"
+                + "<b>Pause game:</b> Escape"
                 + "</div></html>");
         controlsTextLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         controlsTextLabel.setForeground(Color.WHITE);
