@@ -21,6 +21,8 @@ public class Board{
 	boolean gameOver = false;
 	public boolean updateNextPiece = true;
 	
+	boolean isPaused = false;
+	
 	
 	public Board(){
 		board = new int[BOARD_SIZE_Y][BOARD_SIZE_X];

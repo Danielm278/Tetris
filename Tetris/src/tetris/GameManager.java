@@ -51,7 +51,7 @@ public class GameManager{
 
         timer = Executors.newSingleThreadScheduledExecutor();
         gameTask = new Helper(board, timer);
-		KeyPressHandler handler = new KeyPressHandler(board, gameScreen); 
+		KeyPressHandler handler = new KeyPressHandler(board, gameScreen, game_music_player); 
     	
         JPanel panel = new JPanel();
         panel.setOpaque(false);
@@ -65,12 +65,14 @@ public class GameManager{
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "moveRight");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "moveDown");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "spaceAction");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "escapeAction");
         
 
         actionMap.put("moveLeft", handler.left);
         actionMap.put("moveRight", handler.right);
         actionMap.put("moveDown", handler.down);
         actionMap.put("spaceAction", handler.rotate);
+        actionMap.put("escapeAction", handler.togglePause);
         
         
         gameScreen.set_Current_Piece_Color(board.current_piece.pieceColor);
@@ -117,6 +119,10 @@ public class GameManager{
 		}
 	    public void run()
 	    {	
+	    	if(board.isPaused)
+	    	{
+	    		return;
+	    	}
 	    	if(board.gameOver) {
 	    		System.out.println("quitting game");
 	    		stopGame(true);

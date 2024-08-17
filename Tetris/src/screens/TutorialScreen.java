@@ -15,7 +15,7 @@ public class TutorialScreen extends JFrame {
 
     public TutorialScreen(boolean openGame) {
         setTitle("Tetris Tutorial");
-        setSize(400, 320);
+        setSize(400, 340);
         setLocationRelativeTo(null); // Center the window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -40,6 +40,8 @@ public class TutorialScreen extends JFrame {
         explanationLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         explanationLabel.setForeground(Color.WHITE);
         explanationLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        explanationLabel.setHorizontalAlignment(JLabel.CENTER);
+        explanationLabel.setVerticalAlignment(JLabel.CENTER);
         explanationLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         tutorialPanel.add(explanationLabel);
 
@@ -54,11 +56,14 @@ public class TutorialScreen extends JFrame {
                 + "Move Left: Left Arrow Key<br>"
                 + "Move Right: Right Arrow Key<br>"
                 + "Move Down: Down Arrow Key<br>"
-                + "Rotate Piece: Space Bar"
+                + "Rotate Piece: Space Bar<br>"
+                + "Pause game: Escape"
                 + "</div></html>");
         controlsTextLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         controlsTextLabel.setForeground(Color.WHITE);
         controlsTextLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        controlsTextLabel.setHorizontalAlignment(JLabel.CENTER);
+        controlsTextLabel.setVerticalAlignment(JLabel.CENTER);
         tutorialPanel.add(controlsTextLabel);
 
         // Add Continue button
