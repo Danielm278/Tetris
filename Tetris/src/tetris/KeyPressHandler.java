@@ -10,15 +10,15 @@ import java.awt.event.KeyEvent;
 
 public class KeyPressHandler {
 	Board board;
-	GameScreen gameScrean;
+	GameScreen gameScreen;
 	int BOARD_X, BOARD_Y;
 	boolean isPaused;
 	MusicPlayer game_music_player;
 	long game_music_player_loc = 0;
 
-	public KeyPressHandler(Board board, GameScreen gameScrean, MusicPlayer game_music_player) {
+	public KeyPressHandler(Board board, GameScreen gameScreen, MusicPlayer game_music_player) {
 		this.board = board;
-		this.gameScrean = gameScrean;
+		this.gameScreen = gameScreen;
 		BOARD_X = board.BOARD_SIZE_X;
 		BOARD_Y = board.BOARD_SIZE_Y;
 		this.game_music_player = game_music_player;
@@ -30,15 +30,17 @@ public class KeyPressHandler {
 		public void actionPerformed(ActionEvent e) {
 			isPaused = !isPaused;
 			board.isPaused = isPaused;
-			gameScrean.togglePauseOverlay(isPaused);
+			gameScreen.togglePauseOverlay(isPaused);
 			if(isPaused) {
 				game_music_player_loc = game_music_player.clip.getMicrosecondPosition();
 				game_music_player.clip.stop();
 			}
 			else {
+				if(!gameScreen.isMuted) {
 				game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
 				game_music_player.clip.setMicrosecondPosition(game_music_player_loc);
 				game_music_player.clip.start();
+				}
 			}
 			System.out.println("ESC registered");
 		}
@@ -150,11 +152,18 @@ public class KeyPressHandler {
 
 		}
 	};
+	public Action toggleMute = new AbstractAction() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameScreen.toggleMute();
+
+		}
+	};
 
 	void updateScrean() {
 		for(int i = 0; i < board.BOARD_SIZE_Y; i++) {
 			for(int j = 0; j< board.BOARD_SIZE_X; j++) {
-				gameScrean.setGridSquareColor(i,j,board.board[i][j]);
+				gameScreen.setGridSquareColor(i,j,board.board[i][j]);
 			}
 		}
 	}

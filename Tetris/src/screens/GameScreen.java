@@ -2,6 +2,8 @@ package screens;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +32,11 @@ public class GameScreen extends JFrame {
     Color next_piece_color=Color.BLUE;
     tetris.Board gameBoard;
 
+    private JButton muteButton;
+    public boolean isMuted = false;
+    private ImageIcon muteIcon;
+    private ImageIcon unmuteIcon;
+    private MusicPlayer musicPlayer;
     
     private JLayeredPane lpane = new JLayeredPane();
     PauseOverlay pauseOverlayPanel;
@@ -37,9 +44,6 @@ public class GameScreen extends JFrame {
     public GameScreen(tetris.Board game_board) {
     	this.gameBoard = game_board;
     	
-    	//MusicPlayer musicPlayer = new MusicPlayer();
-    	//musicPlayer.playMusic("C:\\Users\\roniw\\eclipse-workspace\\Teris_Project\\Tetris\\src\\game_music.wav"); // Replace with your actual music file path
-
         setTitle("Tetris");
         setSize(pageWidth, pageHeight);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -57,7 +61,6 @@ public class GameScreen extends JFrame {
         gamePanel = new GameScreenBackgroundPanel();
         gamePanel.setLayout(null);
         gamePanel.setBorder(BorderFactory.createEmptyBorder(VERTICAL_PADDING, HORIZONTAL_PADDING, VERTICAL_PADDING, HORIZONTAL_PADDING));
-        
         
         // Create a layered pane
         JLayeredPane layeredPane = new JLayeredPane();
@@ -124,9 +127,35 @@ public class GameScreen extends JFrame {
         nextPieceLabel.setFont(new Font("Arial", Font.BOLD, 14));
         nextPieceLabel.setForeground(Color.WHITE);
         nextPieceLabel.setBounds(HORIZONTAL_PADDING, (int) (getHeight() * 0.25) - 20, 80, 20);
-
         gamePanel.add(nextPieceLabel);
         gamePanel.add(nextPiecePanel);
+        
+        // Load mute and unmute icons
+        try {
+            muteIcon = new ImageIcon(ImageIO.read(new File("Tetris/src/mute.png")));
+            unmuteIcon = new ImageIcon(ImageIO.read(new File("Tetris/src/unmute.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Create mute button
+        muteButton = new JButton();
+        muteButton.setIcon(unmuteIcon); // Start with unmute icon
+        muteButton.setBounds(10, 10, 40, 40);
+        muteButton.setContentAreaFilled(false); // Make button transparent
+        muteButton.setBorderPainted(false);
+        muteButton.setFocusPainted(false);
+        muteButton.setFocusable(false);
+
+        // Add action listener to toggle mute
+        muteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	toggleMute();
+            }
+        });
+        muteButton.setVisible(true);
+        gamePanel.add(muteButton);
 
         //add(gamePanel, BorderLayout.CENTER);
         add(lpane, BorderLayout.CENTER);
@@ -145,11 +174,19 @@ public class GameScreen extends JFrame {
         lpane.add(gamePanel, 0, 0);
         lpane.add(pauseOverlayPanel, 1, 0);
         pack();
-        setVisible(true);
-        
+        setVisible(true);  
     }
     
-    public void togglePauseOverlay(boolean show) {
+    public void toggleMute() {
+        isMuted = !isMuted;
+        if (isMuted) {
+            muteButton.setIcon(muteIcon);
+        } else {
+            muteButton.setIcon(unmuteIcon);
+        }
+	}
+
+	public void togglePauseOverlay(boolean show) {
     	pauseOverlayPanel.setVisible(show);
     }
 
