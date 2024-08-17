@@ -53,7 +53,13 @@ public class TetrisOpeningScreen  extends Thread implements IThread{
                 // Code to start the game goes here
         	    if(firstTime) {
         	    	firstTime = false;
-        	    	new TutorialScreen(true);
+        	    	TutorialScreen tutorialScreen = new TutorialScreen(true);
+        	    	tutorialScreen.addWindowListener(new WindowAdapter() {
+        	        	  public void windowClosing(WindowEvent e) {
+        	        		  player.stopMusic();
+        	          		  TetrisOpeningScreen.openScreen();
+        	          	  }
+        	          	});
         	    }
         	    else
         	    	{

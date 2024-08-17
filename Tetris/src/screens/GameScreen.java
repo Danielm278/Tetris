@@ -20,7 +20,7 @@ public class GameScreen extends JFrame {
     private BufferedImage backgroundImage;
     private JPanel[][] gridSquares;
     private JPanel[][] nextPieceSquares;
-
+    private int pageWidth = GRID_COLS * 20 + 140 + 2 * HORIZONTAL_PADDING, pageHeight = GRID_ROWS * 20 + 2 * VERTICAL_PADDING;
     Color gridColor = Color.WHITE;
     Color emptyColor = Color.LIGHT_GRAY;
    
@@ -30,6 +30,10 @@ public class GameScreen extends JFrame {
     Color next_piece_color=Color.BLUE;
     tetris.Board gameBoard;
 
+    
+    private JLayeredPane lpane = new JLayeredPane();
+    PauseOverlay pauseOverlayPanel;
+    
     public GameScreen(tetris.Board game_board) {
     	this.gameBoard = game_board;
     	
@@ -37,7 +41,7 @@ public class GameScreen extends JFrame {
     	//musicPlayer.playMusic("C:\\Users\\roniw\\eclipse-workspace\\Teris_Project\\Tetris\\src\\game_music.wav"); // Replace with your actual music file path
 
         setTitle("Tetris");
-        setSize(GRID_COLS * 20 + 200 + 2 * HORIZONTAL_PADDING, GRID_ROWS * 20 + 2 * VERTICAL_PADDING);
+        setSize(pageWidth, pageHeight);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -49,10 +53,19 @@ public class GameScreen extends JFrame {
             e.printStackTrace();
         }
 
+        
         gamePanel = new GameScreenBackgroundPanel();
         gamePanel.setLayout(null);
         gamePanel.setBorder(BorderFactory.createEmptyBorder(VERTICAL_PADDING, HORIZONTAL_PADDING, VERTICAL_PADDING, HORIZONTAL_PADDING));
+        
+        
+        // Create a layered pane
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(pageWidth, pageHeight));
+        setContentPane(layeredPane);
+        layeredPane.add(gamePanel, JLayeredPane.DEFAULT_LAYER);
 
+        
         JPanel gridPanel = new JPanel(new GridLayout(GRID_ROWS, GRID_COLS));
         gridPanel.setBounds(150, VERTICAL_PADDING, GRID_COLS * 20, GRID_ROWS * 20);
         gridPanel.setOpaque(false);
@@ -115,12 +128,29 @@ public class GameScreen extends JFrame {
         gamePanel.add(nextPieceLabel);
         gamePanel.add(nextPiecePanel);
 
-        add(gamePanel, BorderLayout.CENTER);
-
-        gamePanel.revalidate();
-        gamePanel.repaint();
-
+        //add(gamePanel, BorderLayout.CENTER);
+        add(lpane, BorderLayout.CENTER);
+        lpane.setBounds(0, 0, pageWidth, pageHeight);
+        gamePanel.setBackground(Color.BLUE);
+        gamePanel.setBounds(0, 0, pageWidth, pageHeight);
+        gamePanel.setOpaque(true);
+        
+        // Add the pause overlay on top of the game panel
+        pauseOverlayPanel = new PauseOverlay();
+        pauseOverlayPanel.setBounds(100, 100, 200, 200);
+        pauseOverlayPanel.setVisible(false);
+        
+        
+        pauseOverlayPanel.setOpaque(true);
+        lpane.add(gamePanel, 0, 0);
+        lpane.add(pauseOverlayPanel, 1, 0);
+        pack();
         setVisible(true);
+        
+    }
+    
+    public void togglePauseOverlay(boolean show) {
+    	pauseOverlayPanel.setVisible(show);
     }
 
     public void setGridSquareColor(int row, int col, int value) {

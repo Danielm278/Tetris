@@ -3,6 +3,7 @@ package tetris;
 import javax.swing.*;
 
 import screens.GameScreen;
+import screens.MusicPlayer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -11,13 +12,37 @@ public class KeyPressHandler {
 	Board board;
 	GameScreen gameScrean;
 	int BOARD_X, BOARD_Y;
+	boolean isPaused;
+	MusicPlayer game_music_player;
+	long game_music_player_loc = 0;
 
-	public KeyPressHandler(Board board, GameScreen gameScrean) {
+	public KeyPressHandler(Board board, GameScreen gameScrean, MusicPlayer game_music_player) {
 		this.board = board;
 		this.gameScrean = gameScrean;
 		BOARD_X = board.BOARD_SIZE_X;
 		BOARD_Y = board.BOARD_SIZE_Y;
+		this.game_music_player = game_music_player;
+		isPaused = false;
 	}
+
+	Action togglePause = new AbstractAction() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			isPaused = !isPaused;
+			board.isPaused = isPaused;
+			gameScrean.togglePauseOverlay(isPaused);
+			if(isPaused) {
+				game_music_player_loc = game_music_player.clip.getMicrosecondPosition();
+				game_music_player.clip.stop();
+			}
+			else {
+				game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
+				game_music_player.clip.setMicrosecondPosition(game_music_player_loc);
+				game_music_player.clip.start();
+			}
+			System.out.println("ESC registered");
+		}
+	};
 
 	Action left = new AbstractAction() {
 		@Override
@@ -133,5 +158,4 @@ public class KeyPressHandler {
 			}
 		}
 	}
-
 }
