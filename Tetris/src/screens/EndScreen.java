@@ -23,12 +23,13 @@ import java.awt.event.FocusEvent;
 
 
 public class EndScreen {
-    public static void showEndScreen(int score) {
+    public static void showEndScreen(int score, boolean isMuted) {
     	// Stop the music from GameScreen
     	MusicPlayer player = MusicPlayer.getInstance();
 
     	// Play the loser sound once when the end screen is shown
-    	player.playMusic("Tetris\\src\\loser.wav", false);
+    	if(!isMuted)
+    		player.playMusic("Tetris\\src\\loser.wav", false);
 
         // Create and set up the window
         JFrame frame = new JFrame("Game Over");

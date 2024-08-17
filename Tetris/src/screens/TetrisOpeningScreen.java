@@ -112,19 +112,19 @@ public class TetrisOpeningScreen  extends Thread implements IThread{
         });
         backgroundPanel.add(exitButton);
 
-        // Create and add a small yellow button to go to the end screen
-        CustomRoundedButton endScreenButton = new CustomRoundedButton("End Screen");
-        endScreenButton.setBounds(10, 10, 100, 30); // Position the button
-        endScreenButton.setBackground(Color.YELLOW);
-        endScreenButton.setForeground(Color.BLACK);
-        endScreenButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Show the end screen
-                EndScreen.showEndScreen(123); // Replace with actual username and score
-                frame.dispose(); // Close the opening screen
-            }
-        });
+//        // Create and add a small yellow button to go to the end screen
+//        CustomRoundedButton endScreenButton = new CustomRoundedButton("End Screen");
+//        endScreenButton.setBounds(10, 10, 100, 30); // Position the button
+//        endScreenButton.setBackground(Color.YELLOW);
+//        endScreenButton.setForeground(Color.BLACK);
+//        endScreenButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                // Show the end screen
+//                EndScreen.showEndScreen(123, false); // Replace with actual username and score
+//                frame.dispose(); // Close the opening screen
+//            }
+//        });
         //backgroundPanel.add(endScreenButton);
 
         // Add the panel to the frame

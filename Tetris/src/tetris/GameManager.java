@@ -9,6 +9,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ActionMap;
@@ -35,6 +36,7 @@ public class GameManager{
 	int previousScore = 0; // Add a variable to track the previous score
     MusicPlayer game_music_player = MusicPlayer.getInstance();
     MusicPlayer totach_player = MusicPlayer.getInstance();
+	long game_music_player_loc = 0;
 	
 	public GameManager() {
 		
@@ -50,7 +52,7 @@ public class GameManager{
     	});
 
         timer = Executors.newSingleThreadScheduledExecutor();
-        gameTask = new Helper(board, timer);
+        gameTask = new Helper(board, timer, gameScreen);
 		KeyPressHandler handler = new KeyPressHandler(board, gameScreen, game_music_player); 
     	
         JPanel panel = new JPanel();
@@ -66,6 +68,7 @@ public class GameManager{
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "moveDown");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "spaceAction");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "escapeAction");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0), "mAction");
         
 
         actionMap.put("moveLeft", handler.left);
@@ -73,6 +76,7 @@ public class GameManager{
         actionMap.put("moveDown", handler.down);
         actionMap.put("spaceAction", handler.rotate);
         actionMap.put("escapeAction", handler.togglePause);
+        actionMap.put("mAction", handler.toggleMute);
         
         
         gameScreen.set_Current_Piece_Color(board.current_piece.pieceColor);
@@ -83,7 +87,7 @@ public class GameManager{
         isRunning = true;
         System.out.println((int) (250 / board.multiplier));
         scheduledFuture = timer.scheduleAtFixedRate(gameTask, 250, (int) (250 / board.multiplier), TimeUnit.MILLISECONDS); // Use scheduleAtFixedRate for fixed interval
-	    game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
+        game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
 //        while(isRunning) {
 //        	try {
 //        		gameTask.run();
@@ -99,7 +103,7 @@ public class GameManager{
 	        scheduledFuture.cancel(true); // Cancel without interrupting current task
 	        timer.shutdown();
 	        if(openEndScreen)
-	        	EndScreen.showEndScreen(board.score);
+	        	EndScreen.showEndScreen(board.score, gameScreen.isMuted);
 	        gameScreen.dispose();
 	        isRunning = false;
 	        return true;
@@ -111,8 +115,11 @@ public class GameManager{
 		ScheduledExecutorService _timer;
 		int counter;
 		Board board;
-		public Helper(Board board, ScheduledExecutorService timer) {
+		GameScreen gameScreen;
+		boolean isMuted;
+		public Helper(Board board, ScheduledExecutorService timer, GameScreen gameScreen) {
 			this.board = board;
+			this.gameScreen = gameScreen;
 			_timer = timer;
 			counter = 0;
 			board.multiplier = 1.0;
@@ -123,6 +130,19 @@ public class GameManager{
 	    	{
 	    		return;
 	    	}
+	    	if(isMuted != gameScreen.isMuted) {
+	    		isMuted = gameScreen.isMuted;
+				if(isMuted) {
+					game_music_player_loc = game_music_player.clip.getMicrosecondPosition();
+					game_music_player.clip.stop();
+				}
+				else {
+					game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
+					game_music_player.clip.setMicrosecondPosition(game_music_player_loc);
+					game_music_player.clip.start();
+				}
+	    	}
+	    		
 	    	if(board.gameOver) {
 	    		System.out.println("quitting game");
 	    		stopGame(true);
@@ -173,20 +193,21 @@ public class GameManager{
 			gameScreen.updateScore(board.score);
 			if(previousScore<board.score) {
 				previousScore = board.score;
-				new Thread(() -> 
-				{
-					long loc = game_music_player.clip.getMicrosecondPosition();
-					System.out.println("stopping game music");
-					game_music_player.stopMusic();
-					System.out.println("starting totach music");
-					totach_player.playMusic("Tetris\\src\\totach.wav", false);
-					while(totach_player.clip.getMicrosecondLength() != totach_player.clip.getMicrosecondPosition()) {}
-					System.out.println("starting game music");
-					game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
-					game_music_player.clip.setMicrosecondPosition(loc);
-					game_music_player.clip.start();
-		        }
-				).start();
+				if(!isMuted)
+					new Thread(() -> 
+					{
+						long loc = game_music_player.clip.getMicrosecondPosition();
+						System.out.println("stopping game music");
+						game_music_player.stopMusic();
+						System.out.println("starting totach music");
+						totach_player.playMusic("Tetris\\src\\totach.wav", false);
+						while(totach_player.clip.getMicrosecondLength() != totach_player.clip.getMicrosecondPosition()) {}
+						System.out.println("starting game music");
+						game_music_player.playMusic("Tetris\\src\\game_music.wav", true);
+						game_music_player.clip.setMicrosecondPosition(loc);
+						game_music_player.clip.start();
+			        }
+					).start();
 			}
 		}
 	}	
